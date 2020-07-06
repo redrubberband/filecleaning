@@ -1,9 +1,6 @@
-from scandir import getAllFiles
-from pathlib import Path
-import shutil
+from modules import getAllFiles, move
 
 #init ==================================================================
-currentDir = Path.cwd()
 
 IMAGE_EXTENSIONS = (
     '.png',   
@@ -34,20 +31,11 @@ def VIDEO_FOLDER():
 
 #init end ==============================================================
 
-def move(filename, filetype):
-    #man:
-    #send filename -> Path
-    #send filetype -> String/Char -> ex: "J"
-
-    currentDir.joinpath(filetype).mkdir(exist_ok=True)                  #create the directory if missing
-    newPath = currentDir.joinpath(filetype)                             #creates new path as target for shutil
-    shutil.move(str(filename), str(newPath))                            #somehow shutil only accepts str, but the docs said it can accept Path. Strange that it doesn't work here.
-
 def main():
-    filesInDir = getAllFiles()
+    files_in_dir = getAllFiles()
 
     print("Moving files...")
-    for file in filesInDir:
+    for file in files_in_dir:
         if file.is_file():
             if str(file).lower().endswith(IMAGE_EXTENSIONS):
                 move(file, IMG_FOLDER())

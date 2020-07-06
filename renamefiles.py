@@ -1,4 +1,4 @@
-from scandir import getAllFiles
+from modules import getAllFiles
 
 def main():
     currentDir = getAllFiles()                                                  #currentDir is the list of files in the working directory
@@ -34,7 +34,7 @@ def main():
                     and word != "is" \
                     and word != "and" \
                     and word != "a" \
-                    else word)
+                    else word)                                                  #else will not capitalize words listed above
 
             filename = " ".join(newwordlist)                                    #join the words together
             filename = filename[:1].upper() + filename[1:]                      #finally, capitalize the first character of the filename
