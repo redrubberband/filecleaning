@@ -1,4 +1,4 @@
-from modules import getAllFiles, move
+from modules import get_all_files, move
 
 #init ==================================================================
 
@@ -32,9 +32,8 @@ def VIDEO_FOLDER():
 #init end ==============================================================
 
 def main():
-    files_in_dir = getAllFiles()
-
-    print("Moving files...")
+    files_in_dir = get_all_files()
+    
     for file in files_in_dir:
         if file.is_file():
             if str(file).lower().endswith(IMAGE_EXTENSIONS):
@@ -46,4 +45,5 @@ def main():
 
     print("Separation completed.")
 
-main()
+if __name__ == "__main__":
+    main()

@@ -1,7 +1,7 @@
-from modules import getAllFiles
+from modules import get_all_files
 
 def main():
-    currentDir = getAllFiles()                                                  #currentDir is the list of files in the working directory
+    currentDir = get_all_files()                                                  #currentDir is the list of files in the working directory
 
     print("Scanning each files...")
     for file in currentDir:
@@ -42,7 +42,5 @@ def main():
             file.replace(filename+""+filename_format)                           #renames the file in the current directory
     print("Renaming finished.")
 
-
-
-
-main()
+if __name__ == "__main__":
+    main()

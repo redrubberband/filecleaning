@@ -1,4 +1,4 @@
-from modules import getAllFiles, move
+from modules import get_all_files, move
 from string import digits
 
 DUPLICATE_DIRECTORY = "Duplicates"
@@ -10,7 +10,7 @@ extensions_to_check = [
 
 def main():
     
-    files_in_dir = getAllFiles()
+    files_in_dir = get_all_files()
     isDuplicateFound = False
     
     print("Checking for duplicates...")
@@ -26,5 +26,5 @@ def main():
     else:
         print("No duplicate found!")
 
-main()
-
+if __name__ == "__main__":
+    main()
