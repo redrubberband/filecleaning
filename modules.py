@@ -8,22 +8,20 @@ NAME_BEFORE_REMOVAL = "regret"
 
 def erase(file):
 
-    # Manual:
     # Renames the file before it's deleted.
 
     dead_file = currentDir.joinpath(NAME_BEFORE_REMOVAL)
-    retry_count = 2
-    for _ in range(retry_count):
-        try:
-            "Removing file..."
-            shutil.move(str(file), str(dead_file))
-            dead_file.unlink()
-            break
-        except BaseException as e:
-            print(e)
-            "Retrying once again..."
-            dead_file.unlink()
-    pass
+
+    if dead_file.exists():
+        "Duplicate detected! Removing the duplicate first..."
+        dead_file.unlink()
+
+    print("Removing file...")
+    try:
+        shutil.move(str(file), str(dead_file))
+        dead_file.unlink()
+    except BaseException as e:
+        print(e)
 
 def move(file, NEW_FOLDER_NAME):
     print("Moving files...")
@@ -32,30 +30,24 @@ def move(file, NEW_FOLDER_NAME):
     # "file" type is Path
     # "newfoldername" type is String/Char -> ex: "J"
 
-    currentDir.joinpath(NEW_FOLDER_NAME).mkdir(exist_ok=True)                 #create the directory if missing
-    newPath = currentDir.joinpath(NEW_FOLDER_NAME)                            #creates new path as target for shutil
-    
-    has_duplicate_file = False
+    target_path = currentDir.joinpath(NEW_FOLDER_NAME)                      # Creates new path as target for shutil
+    target_path.mkdir(exist_ok=True)                                        # Creates the directory if missing
+        
+    if(target_path.joinpath(file.name).exists()):
+        print("Duplicate detected in " + NEW_FOLDER_NAME + \
+            "! Moving file for manual inspection to /Duplicates")
 
-    for oldfile in newPath.iterdir():
+        duplicate_folder = currentDir.joinpath(DUPLICATE_FOLDER_NAME)       # Creates a "Duplocates" folder
+        duplicate_folder.mkdir(exist_ok=True)
 
-        if (oldfile.name == file.name):
+        duplicate_path = duplicate_folder.joinpath(NEW_FOLDER_NAME)         # Creates a folder for their own file types
+        duplicate_path.mkdir(exist_ok=True)
 
-            print("Duplicate detected in " + NEW_FOLDER_NAME + "! Moving file for manual inspection to /Duplicates")
-            
-            duplicate_folder = currentDir.joinpath(DUPLICATE_FOLDER_NAME)
-            duplicate_folder.mkdir(exist_ok=True)
+        shutil.move(str(file), str(duplicate_path))
 
-            duplicate_path = duplicate_folder.joinpath(NEW_FOLDER_NAME)
-            duplicate_path.mkdir(exist_ok=True)
+    else:
 
-            shutil.move(str(file), str(duplicate_path))
-            has_duplicate_file = True
-            
-            break
-
-    if not has_duplicate_file:
-        shutil.move(str(file), str(newPath))                                # According to docs, shutil *should* be able to receive Path. But this one doesn't work without conversion to str(), strange.
+        shutil.move(str(file), str(target_path))                            # According to docs, shutil *should* be able to receive Path. But this one doesn't work without conversion to str(), strange. 
 
 def get_all_files():
     print("Scanning directory...")

@@ -67,17 +67,10 @@ def get_filename(filepath):
 def main():
     
     print("Checking existing logfile for removal...")
-    all_files = get_all_files()
-    is_logfile_exists = False
-
-    for file in all_files:
-        if logfile == file:
-            print("Logfile detected. Removing...")
-            erase(logfile)
-            is_logfile_exists = True
-            break
-    
-    if not is_logfile_exists:
+    if logfile.exists():
+        print("Logfile detected. Removing...")
+        erase(logfile)
+    else:
         print("No logfile found.")
 
     print("Scanning files and creating logfile...")
@@ -89,9 +82,6 @@ def main():
 
     print("Checking audio availability...")
     scan_directory()
-
-    print(has_audio_list)
-    print(no_audio_list)
 
     print("Separating and moving files...")
     move_all()
