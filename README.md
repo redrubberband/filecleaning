@@ -11,8 +11,8 @@ Especially movefiles.py (which in turn, also scanaudio.py), as both used the com
 ## Requirement(s)
 
 * You need to have ffmpeg, ffplay, and ffprobe in the same folder as this project.
-* Python ver. 3.x
+* Python ver. 3.8
 
 ## Usage
 
-Just use it inside your terminal by calling python.
+Just use it inside your terminal inside the target folder by calling python.
