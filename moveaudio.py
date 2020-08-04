@@ -20,7 +20,8 @@ supported_formats = [
     "mp4",
     "webm",
     "avi",
-    "mkv"
+    "mkv",
+    "m4v"
 ]
 
 def scan_directory():

@@ -38,7 +38,7 @@ def main():
 
             filename = " ".join(newwordlist)                                    #join the words together
             filename = filename[:1].upper() + filename[1:]                      #finally, capitalize the first character of the filename
-            
+            filename = ''.join(filter(lambda character:ord(character) < 0x3000,filename)) #this is something I got from stackoverflow to remove japanese characters
             file.replace(filename+""+filename_format)                           #renames the file in the current directory
     print("Renaming finished.")
 

@@ -19,6 +19,10 @@ VIDEO_EXTENSIONS = (
     '.mkv'
 )
 
+HANDBRAKE_VIDEO_EXTENSIONS = (
+    '.m4v'
+)
+
 #static functions, replacement for constants since python has none.
 def IMG_FOLDER():
     return "J"
@@ -28,6 +32,9 @@ def GIF_FOLDER():
 
 def VIDEO_FOLDER():
     return "WM"
+
+def HANDBRAKE_VIDEO_FOLDER():
+    return "W4M"
 
 #init end ==============================================================
 
@@ -42,6 +49,8 @@ def main():
                 move(file, GIF_FOLDER())
             elif str(file).lower().endswith(VIDEO_EXTENSIONS):
                 move(file, VIDEO_FOLDER())
+            elif str(file).lower().endswith(HANDBRAKE_VIDEO_EXTENSIONS):
+                move(file, HANDBRAKE_VIDEO_FOLDER())
 
     print("Separation completed.")
 
