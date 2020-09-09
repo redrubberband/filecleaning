@@ -12,6 +12,10 @@ sleep, 250
  ; Click, right
 return
 
+~MButton & RButton::
+Click, right
+return
+
 WheelUp::
 Send {PgUp}
 Send ^w
@@ -19,10 +23,25 @@ Send ^w
 sleep 250
 return
 
+~MButton & WheelUp::
+Send ^c
+sleep, 600
+return
+
+~MButton & WheelDown::
+Send ^v
+Click, right
+sleep, 600
+return
+
 WheelDown::
+Send {PgDn}
 Send {Right}
 sleep, 600
- ; Send {PgDn}
+return
+
+~LButton & RButton::
+Send {PgDn}
 return
 
 1::ExitApp
