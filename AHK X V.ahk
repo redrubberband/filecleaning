@@ -18,12 +18,20 @@ return
 
 WheelUp::
 Send {PgUp}
+Send {Esc}
 Send ^w
  ; sleep 1000
 sleep 250
 return
 
+WheelDown::
+Send {PgDn}
+Send {Right}
+sleep, 600
+return
+
 ~MButton & WheelUp::
+Send {Left}
 Send ^c
 sleep, 600
 return
@@ -34,14 +42,12 @@ Click, right
 sleep, 600
 return
 
-WheelDown::
-Send {PgDn}
-Send {Right}
-sleep, 600
-return
-
 ~LButton & RButton::
 Send {PgDn}
+return
+
+~Shift & RButton::
+Send {Shift down}{Click, right}
 return
 
 1::ExitApp

@@ -1,10 +1,13 @@
 from pathlib import Path
 import shutil
 import os
+import subprocess
 
-currentDir = Path.cwd()
-DUPLICATE_FOLDER_NAME = "Duplicates"
-NAME_BEFORE_REMOVAL = "regret"
+currentDir              = Path.cwd()
+DUPLICATE_FOLDER_NAME   = "Duplicates"
+NAME_BEFORE_REMOVAL     = "regret"
+
+avidemux_path           = r'C:\Program Files\Avidemux 2.7 VC++ 64bits\avidemux.exe'
 
 def erase(file):
 
@@ -40,10 +43,11 @@ def move(file, NEW_FOLDER_NAME):
         duplicate_folder = currentDir.joinpath(DUPLICATE_FOLDER_NAME)       # Creates a "Duplocates" folder
         duplicate_folder.mkdir(exist_ok=True)
 
-        duplicate_path = duplicate_folder.joinpath(NEW_FOLDER_NAME)         # Creates a folder for their own file types
-        duplicate_path.mkdir(exist_ok=True)
+        # Temporarily disabled because it creates unnecessary clutter
+        #duplicate_path = duplicate_folder.joinpath(NEW_FOLDER_NAME)         # Creates a folder for their own file types
+        #duplicate_path.mkdir(exist_ok=True)
 
-        shutil.move(str(file), str(duplicate_path))
+        shutil.move(str(file), str(duplicate_folder))
 
     else:
 
@@ -68,9 +72,46 @@ def ffmpeg_scan(supported_formats):                                         # WA
         return False                                                        # Returns false if there is no supported file in the folder
 
     for file in files:
+        # I tried fixing this with subprocess but I don't understand how. For now, at least.
         os.system("ffmpeg -hide_banner -i \"" +                             # Uses ffmpeg (volumedetect feature) to detect whether an audio track exists or not
                 str(file) + 
                 "\" -af volumedetect -vn -f null - 2>&1 | findstr mean_volume >> log.txt")
         os.system("ECHO " + str(file) + " >> log.txt")                      # Prints the file list to a logfile
     
     return True                                                             # Returns true if there is at least ONE supported file in the folder
+
+def avidemux_convert(source_formats, target_format):
+
+    video_codec      = "Xvid"
+    audio_codec      = "mp3"
+
+    files = []
+    
+    for format in source_formats:                                            # Scans the folder for files with supported file format
+        currentDir = Path.cwd().glob("*." + format)
+        for filename in currentDir:
+            if filename.is_file():
+                files.append(filename)
+
+    if not files:
+        print("There is no supported file in the folder.")
+        return False                                                        # Returns false if there is no supported file in the folder
+
+    print("ASD")
+    for file in files:
+
+        target_filename = str(file.stem) + "." + target_format              # subprocess can only work without space and extra concatenation, so merge your filenames here.
+        
+        subprocess.run([str(avidemux_path), 
+                    "--video-codec", video_codec, 
+                    "--audio-codec", audio_codec, 
+                    "--force-alt-h264",
+                    "--load", file.name,
+                    "--save", target_filename,
+                    "--quit"
+                    ])
+
+        # Quick and dirty way. DO NOT REMOVE. This might work as a backup.
+        #console_command = "cmd /c \"\"" + str(avidemux_path) + "\" --video-codec " + video_codec + " --audio-codec " + audio_codec + " --force-alt-h264 --load \"" + file.name + "\" --save \"" + str(file.stem) + "." + target_format + "\" --quit\""
+        #os.system(console_command)
+    return True  
