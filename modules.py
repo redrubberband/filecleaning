@@ -8,6 +8,7 @@ DUPLICATE_FOLDER_NAME   = "Duplicates"
 NAME_BEFORE_REMOVAL     = "regret"
 
 avidemux_path           = r'C:\Program Files\Avidemux 2.7 VC++ 64bits\avidemux.exe'
+handbrake_path          = r'D:\Portable Softwares\HandBrakeCLI-1.3.3-win-x86_64\HandBrakeCLI.exe'
 
 def erase(file):
 
@@ -97,7 +98,6 @@ def avidemux_convert(source_formats, target_format):
         print("There is no supported file in the folder.")
         return False                                                        # Returns false if there is no supported file in the folder
 
-    print("ASD")
     for file in files:
 
         target_filename = str(file.stem) + "." + target_format              # subprocess can only work without space and extra concatenation, so merge your filenames here.
@@ -114,4 +114,61 @@ def avidemux_convert(source_formats, target_format):
         # Quick and dirty way. DO NOT REMOVE. This might work as a backup.
         #console_command = "cmd /c \"\"" + str(avidemux_path) + "\" --video-codec " + video_codec + " --audio-codec " + audio_codec + " --force-alt-h264 --load \"" + file.name + "\" --save \"" + str(file.stem) + "." + target_format + "\" --quit\""
         #os.system(console_command)
+    return True  
+
+def mass_move_files(source_formats, target_directory):
+
+    files = []
+
+    for format in source_formats:                                            # Scans the folder for files with supported file format
+        currentDir = Path.cwd().glob("*." + format)
+        for filename in currentDir:
+            if filename.is_file():
+                files.append(filename)
+
+
+    if not files:
+        print("There is no supported file in the folder.")
+        return False                                                        # Returns false if there is no supported file in the folder
+
+    for file in files:
+        move(file, target_directory)
+
+def handbrake_convert(source_formats, target_format):
+
+    preset_location = r'handbrake_compressor_preset.json'
+    # This is a bit messy, but because the preset is in the same folder as the script,
+    # I need to access __file__'s location to get it.
+    handbrake_preset_location = Path(__file__).parent.joinpath(preset_location) 
+    preset_name = "Compressor"
+    # I already made a preset file.
+    # If you want to use this feature and don't have any custom preset,
+    # and then create a custom one.   
+
+    # If you don't want to, just remove the "-Z" line below.
+    # (Better yet, why not use HandBrakeCLI.exe directly?)
+
+    files = []
+    
+    for format in source_formats:                                            # Scans the folder for files with supported file format
+        currentDir = Path.cwd().glob("*." + format)
+        for filename in currentDir:
+            if filename.is_file():
+                files.append(filename)
+
+    if not files:
+        print("There is no supported file in the folder.")
+        return False                                                        # Returns false if there is no supported file in the folder
+
+    for file in files:
+
+        target_filename = str(file.stem) + "." + target_format              # subprocess can only work without space and extra concatenation, so merge your filenames here.
+        
+        subprocess.run([str(handbrake_path), 
+                    "--preset-import-file", handbrake_preset_location,
+                    "-Z", preset_name,
+                    "-i", file.name,
+                    "-o", target_filename
+                    ])
+
     return True  

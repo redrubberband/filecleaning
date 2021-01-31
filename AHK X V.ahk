@@ -4,6 +4,10 @@ SendMode Input  ; Recommended for new scripts due to its superior speed and reli
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #SingleInstance force
 
+;RButton::
+;send {MButton}
+;return
+
 RButton::
 Send v
 sleep, 250
@@ -17,33 +21,40 @@ Click, right
 return
 
 WheelUp::
+;Send {WheelUp}
 Send {PgUp}
 Send {Esc}
+;Send {Left}
 Send ^w
- ; sleep 1000
+; sleep 1000
 sleep 250
 return
 
 WheelDown::
-Send {PgDn}
-Send {Right}
-sleep, 600
+;Send {PgDn}
+Send {WheelDown}
+;Send {Right}
+;sleep, 100
 return
 
 ~MButton & WheelUp::
-Send {Left}
 Send ^c
-sleep, 600
-return
-
-~MButton & WheelDown::
-Send ^v
 Click, right
 sleep, 600
 return
 
+~RButton & WheelUp::
+Send {PgUp}
+Send {Esc}
+;Send {Left}
+Send ^w
+sleep 1000
+;sleep 250
+return
+
 ~LButton & RButton::
-Send {PgDn}
+Send {Right}
+;Send {Left}
 return
 
 ~Shift & RButton::

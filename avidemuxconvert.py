@@ -1,10 +1,13 @@
 from modules import get_all_files, avidemux_convert
 
+# Q: What does this file do?
+# A: Converts source_formats to target_format using avidemux
+
 #init ==============
 
-source_formats = (
+source_formats = [
     'ts'
-)
+]
 
 target_format = 'mp4'
 
