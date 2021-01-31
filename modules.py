@@ -192,7 +192,7 @@ def ffmpeg_compress(source_formats, target_format, move_old_file_to_here, new_fi
 
     for file in files:
 
-        target_filename = str(file.stem) + "_compressed." + target_format              # subprocess can only work without space and extra concatenation, so merge your filenames here.
+        target_filename = str(file.stem) + "_x265." + target_format              # subprocess can only work without space and extra concatenation, so merge your filenames here.
         
         subprocess.run(["ffmpeg", 
                     "-hide_banner",
