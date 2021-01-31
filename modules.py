@@ -134,7 +134,7 @@ def mass_move_files(source_formats, target_directory):
     for file in files:
         move(file, target_directory)
 
-def handbrake_convert(source_formats, target_format):
+def handbrake_convert(source_formats, target_format, move_old_file_to_here, new_file_goes_here):
 
     preset_location = r'handbrake_compressor_preset.json'
     # This is a bit messy, but because the preset is in the same folder as the script,
@@ -170,5 +170,8 @@ def handbrake_convert(source_formats, target_format):
                     "-i", file.name,
                     "-o", target_filename
                     ])
+
+        move(file, move_old_file_to_here)
+        move(Path(target_filename), new_file_goes_here)
 
     return True  

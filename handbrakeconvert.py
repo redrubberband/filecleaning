@@ -13,10 +13,13 @@ source_formats = [
 
 target_format = 'm4v'
 
+move_old_file_to_here   = "Old Files"
+new_file_goes_here      = "Converted"
+
 #init end ==========
 
 def main():
-    handbrake_convert(source_formats, target_format)
+    handbrake_convert(source_formats, target_format, move_old_file_to_here, new_file_goes_here)
     print("Conversion completed.")
 
 if __name__ == "__main__":
