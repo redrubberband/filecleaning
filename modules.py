@@ -175,3 +175,33 @@ def handbrake_convert(source_formats, target_format, move_old_file_to_here, new_
         move(Path(target_filename), new_file_goes_here)
 
     return True  
+
+def ffmpeg_compress(source_formats, target_format, move_old_file_to_here, new_file_goes_here):
+
+    files = []
+    
+    for format in source_formats:                                            # Scans the folder for files with supported file format
+        currentDir = Path.cwd().glob("*." + format)
+        for filename in currentDir:
+            if filename.is_file():
+                files.append(filename)
+
+    if not files:
+        print("There is no supported file in the folder.")
+        return False                                                        # Returns false if there is no supported file in the folder
+
+    for file in files:
+
+        target_filename = str(file.stem) + "_compressed." + target_format              # subprocess can only work without space and extra concatenation, so merge your filenames here.
+        
+        subprocess.run(["ffmpeg", 
+                    "-hide_banner",
+                    "-i", file.name,
+                    "-c:v", "libx265",
+                    target_filename,
+                    ])
+
+        move(file, move_old_file_to_here)
+        move(Path(target_filename), new_file_goes_here)
+
+    return True  
