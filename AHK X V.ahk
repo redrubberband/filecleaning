@@ -61,4 +61,7 @@ return
 Send {Shift down}{Click, right}
 return
 
+PrintScreen::
+	Send \
+	return
 1::ExitApp

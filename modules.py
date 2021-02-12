@@ -2,6 +2,7 @@ from pathlib import Path
 import shutil
 import os
 import subprocess
+from datetime import datetime
 
 currentDir              = Path.cwd()
 DUPLICATE_FOLDER_NAME   = "Duplicates"
@@ -205,3 +206,8 @@ def ffmpeg_compress(source_formats, target_format, move_old_file_to_here, new_fi
         move(Path(target_filename), new_file_goes_here)
 
     return True  
+
+def get_time():
+    currentTime = datetime.now()
+    currentTime_formatted = currentTime.strftime("%d/%m/%Y %H:%M:%S")
+    return currentTime_formatted
